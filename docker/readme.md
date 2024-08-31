@@ -46,6 +46,12 @@ docker run [image name:tag(versiton)]
 
 it will try to find locally and if can't find then pull that image and run it.
 
+8.Build a docker file with a name and versiton and current directory "."
+
+```sh
+docker build -t my-app:1.0.0 .
+```
+
 ## Explse the posrt
 
 Application inside contaienr runs in an isolated Docker network, we need to expose the contaienr port to the computer.it called port binding
@@ -61,3 +67,48 @@ docker stop [container id]
 ```sh
 docker run -d -p 9000:80 [image name:tag(versiton)]
 ```
+
+9000 is host port and 80 is container port
+
+Docker run command creates a new container it doesn't use previous one.
+
+2.to see all contaienr wheater it is running or not :
+
+```sh
+docker ps -a
+```
+
+if we only run ps then it give the list of running container
+
+3.Don't wannt create new container and run a previous container :
+
+```sh
+docker start [container id]
+```
+
+4.Memorize a container id is hard for this we can give a name by:
+
+```sh
+docker run --name web_app -p 9000:80 [image name:tag(versiton)]
+```
+
+Now we can work with "web_app"
+
+5.Repository vs Registry
+Repo:collection of related images with same name but diffrent versions and registry is collection of repositories.
+
+6.Dockerfile: This is a text document that contains commands to assemble an image.docker can build an image by reading those instructions
+
+### Structer of doc file
+
+1.FROM:build this image from the specified image
+2.RUN:will execute any command in a shell inside the container verionment
+3.COPY:copies files or directories and adds them to the filesystem of the container. whle "RUN" is executed in the container, "COPY" is exectued on the host
+ex:COPY src /app/
+it will copy src directory into app directory
+
+4. WORKDIR:sets the working directory for all following commands
+   ex:WORKDIR /app
+   for folling command it use this directory
+
+5.CMD:the instruction that is to be executed when a docker container starts
