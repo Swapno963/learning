@@ -44,4 +44,167 @@ the get_url function in the PostSerializer will be executed automatically by Dja
 pub_date = models.DateTimeField("date published")
 The verbose_name "date published" will be displayed as the label in the Django admin interface or any forms generated using this model.
 
-6.
+6.If you’re interested, you can also run python manage.py check; this checks for any problems in your project without making migrations or touching the database.
+
+7. interactive Python shell and play around with the free API Django gives you.
+   python manage.py shell
+
+> > > from polls.models import Choice, Question # Import the model classes we just wrote.
+
+# No questions are in the system yet.
+
+> > > Question.objects.all()
+> > > <QuerySet []>
+
+# Create a new Question.
+
+# Support for time zones is enabled in the default settings file, so
+
+# Django expects a datetime with tzinfo for pub_date. Use timezone.now()
+
+# instead of datetime.datetime.now() and it will do the right thing.
+
+> > > from django.utils import timezone
+> > > q = Question(question_text="What's new?", pub_date=timezone.now())
+
+# Save the object into the database. You have to call save() explicitly.
+
+> > > q.save()
+
+# Now it has an ID.
+
+> > > q.id
+> > > 1
+
+# Access model field values via Python attributes.
+
+> > > q.question_text
+> > > "What's new?"
+> > > q.pub_date
+> > > datetime.datetime(2012, 2, 26, 13, 0, 0, 775217, tzinfo=datetime.timezone.utc)
+
+# Change values by changing the attributes, then calling save().
+
+> > > q.question_text = "What's up?"
+> > > q.save()
+
+# objects.all() displays all the questions in the database.
+
+> > > Question.objects.all()
+> > > <QuerySet [<Question: Question object (1)>]>
+
+8. custom method to model
+
+```ch
+class Article(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    pub_date = models.DateTimeField("date published")
+
+    def __str__(self):
+        return self.title
+
+    def was_published_recently(self):
+        """
+        Returns True if the article was published within the last 24 hours.
+        """
+        now = timezone.now()
+        return now - timezone.timedelta(days=1) <= self.pub_date <= now
+
+
+
+def article_list(request):
+    articles = Article.objects.all()
+    for article in articles:
+        if article.was_published_recently():
+            print(f"{article.title} was published recently.")
+    return render(request, 'articles/article_list.html', {'articles': articles})
+
+
+```
+
+9.how to use double underscores to perform field lookups via the API
+In Django, double underscores (\_\_) are used to perform field lookups in queries. These lookups allow you to filter, sort, and retrieve specific data based on related fields or specific conditions.
+
+To filter a queryset based on an exact match of a field's value.
+
+```ch
+queryset = MyModel.objects.filter(field_name__exact='value')
+```
+
+To filter a queryset based on a case-insensitive exact match.
+
+```ch
+queryset = MyModel.objects.filter(field_name__iexact='value')
+
+```
+
+To filter a queryset based on whether a field contains a certain substring.
+
+```ch
+queryset = MyModel.objects.filter(field_name__contains='substring')
+
+```
+
+To filter a queryset based on whether a field contains a certain substring, case-insensitively.
+
+```ch
+queryset = MyModel.objects.filter(field_name__icontains='substring')
+
+```
+
+To filter based on whether a field's value is greater than or less than a certain value.
+
+```ch
+queryset = MyModel.objects.filter(field_name__gt=value)   # Greater than
+queryset = MyModel.objects.filter(field_name__lt=value)   # Less than
+queryset = MyModel.objects.filter(field_name__gte=value)  # Greater than or equal to
+queryset = MyModel.objects.filter(field_name__lte=value)  # Less than or equal to
+
+```
+
+To filter based on specific date components (year, month, day).
+
+```ch
+queryset = MyModel.objects.filter(date_field__year=2024)
+queryset = MyModel.objects.filter(date_field__month=9)
+queryset = MyModel.objects.filter(date_field__day=2)
+
+```
+
+To filter based on whether a field's value is NULL or not.
+
+```ch
+queryset = MyModel.objects.filter(field_name__isnull=True)   # Is null
+queryset = MyModel.objects.filter(field_name__isnull=False)  # Is not null
+```
+
+To filter based on a related model's field.
+
+```ch
+queryset = MyModel.objects.filter(related_model__related_field='value')
+
+```
+
+related_model\_\_related_field='value':
+
+1. related_model: This is the name of the related field on MyModel. It refers to another model that is linked to MyModel via a foreign key, one-to-one, or many-to-many relationship.
+2. \_\_ (double underscores): In Django, double underscores are used to perform lookups across relationships. It allows you to traverse the relationships between models.
+3. related_field: This is the field in the related model that you want to filter by.
+4. 'value': This is the value you are filtering for in the related_field of the related_model.
+
+```ch
+
+```
+
+```ch
+
+```
+
+```ch
+
+```
+
+```ch
+
+```
