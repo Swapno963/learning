@@ -37,3 +37,11 @@ the get_url function in the PostSerializer will be executed automatically by Dja
         return HttpResponse(f'User {user_id} profile is editable.')
         else:
         return HttpResponse(f'User {user_id} profile is not editable.')
+
+4.While you’re editing mysite/settings.py, set TIME_ZONE to your time zone.
+
+5.verbose name
+pub_date = models.DateTimeField("date published")
+The verbose_name "date published" will be displayed as the label in the Django admin interface or any forms generated using this model.
+
+6.
