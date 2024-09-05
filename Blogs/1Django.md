@@ -242,10 +242,8 @@ _NumericPasswordValidator_:This validator checks if the password consists entire
 
 ### choice_set vs. related_name in Django
 
-```ch
 choice_set (Default Reverse Relation):
 
-Django automatically adds a reverse relationship for ForeignKey fields.
 By default, if a model Choice has a ForeignKey to Question, Django will give the reverse relation a name like question.choice_set.
 Example: To get all choices related to a question, you would use question.choice_set.all().
 related_name (Custom Reverse Relation):
@@ -254,12 +252,53 @@ Allows you to customize the reverse relationship name for a ForeignKey.
 By specifying related_name='choices' in the Choice model, you can access related choices for a question using question.choices.all() instead of the default choice_set.
 This improves code readability and avoids conflicts if there are multiple ForeignKey relationships in the same model.
 Example: Instead of using choice_set, you can now use a more meaningful question.choices.all().
-```
 
-\*\*
+```ch
+from django.db import models
+
+class Question(models.Model):
+    text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+
+    def __str__(self):
+        return self.text
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choices')
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.choice_text
+
+
+def question_detail(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
+    # Get all related choices using the custom related_name
+    choices = question.choices.all()
+
+    context = {
+        'question': question,
+        'choices': choices,
+    }
+    return render(request, 'polls/question_detail.html', context)
+```
 
 ```ch
 
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+
+question = Question.objects.get(id=1)
+question.choice_set.create(choice_text="Not much", votes=0)
+<!-- show you result -->
+q.choice_set.all()
 ```
 
 \*\*
