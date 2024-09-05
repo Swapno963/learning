@@ -193,13 +193,154 @@ related_model\_\_related_field='value':
 3. related_field: This is the field in the related model that you want to filter by.
 4. 'value': This is the value you are filtering for in the related_field of the related_model.
 
+   10.The AUTH_PASSWORD_VALIDATORS setting in Django is a list of validators that are used to enforce specific rules on user passwords to enhance security. Each validator in the list serves a unique purpose, from checking the similarity of the password to user attributes to ensuring the password's length and complexity.
+
+**UserAttributeSimilarityValidator**:his validator checks if the password is too similar to the user's personal information, such as their username, first name, last name, or email address. The idea is to prevent users from creating passwords that are easily guessable based on their known personal data.
+
+```ch
+{
+    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    'OPTIONS': {
+        'user_attributes': ('username', 'first_name', 'last_name', 'email'),
+        'max_similarity': 0.7,  # Default is 0.7, but you can adjust the similarity threshold
+    },
+}
+```
+
+_MinimumLengthValidator_:This validator enforces a minimum length requirement on passwords. It helps ensure that passwords are of a sufficient length to be secure, as shorter passwords are generally easier to crack.
+
+```ch
+{
+    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    'OPTIONS': {
+        'min_length': 8,  # Default is 8, but you can set it to any number
+    },
+}
+```
+
+_CommonPasswordValidator_:This validator checks if the password is too common. Django maintains a list of common passwords (e.g., password, 12345678, qwerty) that are easily guessable by attackers. The validator ensures that users do not choose such passwords.
+
+```ch
+{
+    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    'OPTIONS': {
+        'password_list_path': '/path/to/common_passwords.txt',  # Optional: Custom path to a list of common passwords
+    },
+}
+```
+
+_NumericPasswordValidator_:This validator checks if the password consists entirely of numeric digits. Numeric passwords (e.g., 12345678) are generally weaker and easier to guess. This validator ensures that the password is not purely numeric.
+
+```ch
+{
+    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+}
+
+```
+
+\*\*
+
+### choice_set vs. related_name in Django
+
+```ch
+choice_set (Default Reverse Relation):
+
+Django automatically adds a reverse relationship for ForeignKey fields.
+By default, if a model Choice has a ForeignKey to Question, Django will give the reverse relation a name like question.choice_set.
+Example: To get all choices related to a question, you would use question.choice_set.all().
+related_name (Custom Reverse Relation):
+
+Allows you to customize the reverse relationship name for a ForeignKey.
+By specifying related_name='choices' in the Choice model, you can access related choices for a question using question.choices.all() instead of the default choice_set.
+This improves code readability and avoids conflicts if there are multiple ForeignKey relationships in the same model.
+Example: Instead of using choice_set, you can now use a more meaningful question.choices.all().
+```
+
+\*\*
+
 ```ch
 
 ```
 
+\*\*
+
 ```ch
 
 ```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
+
+```ch
+
+```
+
+\*\*
 
 ```ch
 
