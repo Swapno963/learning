@@ -301,23 +301,32 @@ question.choice_set.create(choice_text="Not much", votes=0)
 q.choice_set.all()
 ```
 
-\*\*
+_Template namespacing_:Now we might be able to get away with putting our templates directly in polls/templates (rather than creating another polls subdirectory), but it would actually be a bad idea. Django will choose the first template it finds whose name matches, and if you had a template with the same name in a different application, Django would be unable to distinguish between them. We need to be able to point Django at the right one, and the best way to ensure this is by namespacing them. That is, by putting those templates inside another directory named for the application itself.
+
+_get_object_or_404()_:Returns an object based on a model and filters, or raises a Http404 exception if no matching object is found.Retrieving an object from the database for a detail view, ensuring that a 404 error is raised if the object doesn't exist.
 
 ```ch
-
+def post_detail(request, post_id):
+    post = get_object_or_404(BlogPost, id=post_id)
+    return render(request, 'post_detail.html', {'post': post})
 ```
 
-\*\*
+_get_list_or_404()_:Returns a list of objects, or raises Http404 if the list is empty.Returns a list of objects, or raises Http404 if the list is empty.
+
+````ch
+def author_posts(request, author_id):
+    posts = get_list_or_404(BlogPost, author__id=author_id)
+    return render(request, 'author_posts.html', {'posts': posts})```
+
+*resolve_url()*:Returns the URL of a view or a model object by calling reverse() internally.Real-World Use: Resolving dynamic URLs or object-based URLs to use them in redirection or context.
 
 ```ch
+from django.shortcuts import resolve_url
 
-```
+def redirect_to_post(post):
+    return redirect(resolve_url('post-detail', pk=post.pk))
 
-\*\*
-
-```ch
-
-```
+````
 
 \*\*
 
