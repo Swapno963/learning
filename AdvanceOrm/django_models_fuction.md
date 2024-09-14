@@ -28,7 +28,7 @@ results = MyModel.objects.annotate(sub_string=Substr('text_field', 1, 5))  # Get
 results = MyModel.objects.filter(some_date__lte=Now())
 ```
 5. *TruncDate*:Truncates a date or datetime field to just the date.
-```ch
+```ch 
 results = MyModel.objects.annotate(truncated_date=TruncDate('datetime_field'))
 ```
 ExtractMonth:Extracts the month from a date or datetime field.
