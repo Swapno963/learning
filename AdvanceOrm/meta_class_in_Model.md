@@ -53,8 +53,7 @@ class TimestampedModel(models.Model):
         abstract = True
 
 ```
-5. Indexing Fields
-Use Case: Improve query performance by adding indexes on frequently searched fields.
+5. Indexing Fields Use Case: Improve query performance by adding indexes on frequently searched fields.
 
 Explanation: This adds a database index to the name field, improving search performance for that field.
 
