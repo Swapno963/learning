@@ -71,12 +71,31 @@ You have a simple blog application where users can read articles, post comments,
 
 Async View Use Case:
 You are building a dashboard where data is pulled from multiple external APIs (e.g., financial data, weather updates) and displayed to the user in real-time. Using async views will let you fetch this data concurrently from multiple APIs, improving the performance and responsiveness of your dashboard.
-```python
 
+
+
+## get_object_or_404()
+Calls get() on a given model manager, but it raises Http404 instead of the model’s DoesNotExist exception.
+
+ 
+```python
+from django.shortcuts import get_object_or_404
+
+
+def my_view(request):
+    obj = get_object_or_404(MyModel, pk=1)
 ```
 
+This example is equivalent to:
 ```python
+from django.http import Http404
 
+
+def my_view(request):
+    try:
+        obj = MyModel.objects.get(pk=1)
+    except MyModel.DoesNotExist:
+        raise Http404("No MyModel matches the given query.")
 ```
 
 ```python
