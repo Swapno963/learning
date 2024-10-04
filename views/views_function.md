@@ -97,10 +97,16 @@ def my_view(request):
     except MyModel.DoesNotExist:
         raise Http404("No MyModel matches the given query.")
 ```
-
+We can also do this 
 ```python
-
+get_object_or_404(Book, title__startswith="M", pk=1)
 ```
+
+
+
+## get_list_or_404
+Returns the result of filter() on a given model manager cast to a list, raising Http404 if the resulting list is empty.
+
 
 ```python
 
